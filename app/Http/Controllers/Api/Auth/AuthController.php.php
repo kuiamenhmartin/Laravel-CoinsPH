@@ -50,16 +50,16 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-      if (Gate::allows('create-tasks', $request)) {
-         echo 'Allowed';
-       } else {
-         echo 'Not Allowed';
-       }
-        // dd(auth()->user());
-        // $token = $request->user()->token();
-        // $token->revoke();
-        //
-        // return QioskApp::httpResponse(QioskApp::SUCCESS, ['message' => 'You have been succesfully logged out!'], 200);
+      // if (Gate::allows('create-tasks', $request)) {
+      //    echo 'Allowed';
+      //  } else {
+      //    echo 'Not Allowed';
+      //  }
+      //   // dd(auth()->user());
+        $token = $request->user()->token();
+        $token->revoke();
+
+        return QioskApp::httpResponse(QioskApp::SUCCESS, ['message' => 'You have been succesfully logged out!'], 200);
     }
 
     public function signupActivate($token, ConfirmEmailService $action)
