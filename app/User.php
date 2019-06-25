@@ -9,10 +9,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 use App\Models\Traits\HasPermissionsTrait;
+use App\Models\Traits\UsersTrait;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, Notifiable, SoftDeletes, HasPermissionsTrait;
+    use HasApiTokens, Notifiable, SoftDeletes, HasPermissionsTrait, UsersTrait;
 
     /**
      * The attributes that are mass assignable.

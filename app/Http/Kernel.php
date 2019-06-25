@@ -45,6 +45,7 @@ class Kernel extends HttpKernel
             'bindings',
             \Barryvdh\Cors\HandleCors::class,
             \App\Http\Middleware\RolesAuth::class,
+            'json.response',
         ],
     ];
 

@@ -13,10 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-// Route::middleware('auth:api')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
-
+#Routes for authentication
 Route::group([
     'prefix' => 'auth',
     'middleware' => 'json.response'
@@ -26,10 +23,17 @@ Route::group([
     Route::get('signup/activate/{token}', 'Api\Auth\AuthController@signupActivate');
 
     Route::group([
-      'middleware' => 'auth:api'
+      'middleware' => ['auth:api','verified']
     ], function () {
         Route::get('logout', 'Api\Auth\AuthController@logout')->name('logout');
-        Route::get('listings', 'Api\Auth\AuthController@listings')->middleware('verified');
     });
 });
-// Auth::routes(['verify' => true]);
+
+#Route to add/edit/delete user's api credential
+Route::group([
+    'middleware' => ['auth:api','verified'],
+    'prefix' => 'profile'
+], function () {
+    Route::post('credential/add', 'Api\Profile\ApiCredentialController@store')->name('api.credential.store');
+    Route::post('credential/{api_credential_id}/update', 'Api\Profile\ApiCredentialController@update')->name('api.credential.update');
+});
