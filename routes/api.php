@@ -37,3 +37,15 @@ Route::group([
     Route::post('credential/add', 'Api\Profile\ApiCredentialController@store')->name('api.credential.store');
     Route::post('credential/{api_credential_id}/update', 'Api\Profile\ApiCredentialController@update')->name('api.credential.update');
 });
+
+#Define fallback route
+Route::fallback(function () {
+    return response()->json(
+        [
+            'status' => 'PAGE_NOT_FOUND',
+            'code' => 404,
+            'message' => 'Page Not Found. If error persists, contact info@bitwallet.com'
+        ],
+        404
+    );
+});

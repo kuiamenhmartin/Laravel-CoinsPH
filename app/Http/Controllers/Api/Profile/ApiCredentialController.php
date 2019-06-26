@@ -44,13 +44,10 @@ class ApiCredentialController extends Controller
      */
     public function store(CredentialRequest $request, StoreService $action)
     {
-        // return QioskApp::checkAction(function () use ($request, $action) {
+        $user = $action->execute($request->validated(), $request->user());
 
-            $user = $action->execute($request->validated(), $request->user());
-
-            //throw success when action executes succesfully
-            return QioskApp::httpResponse(QioskApp::SUCCESS, ['message' => 'New Api has been added!'], 200);
-        // });
+        //throw success when action executes succesfully
+        return QioskApp::httpResponse(QioskApp::SUCCESS, 'New Api has been added!');
     }
 
     /**
@@ -83,19 +80,17 @@ class ApiCredentialController extends Controller
      */
     public function update(CredentialRequest $request, UpdateService $action)
     {
-        // return QioskApp::checkAction(function () use ($request, $action) {
-            $data = array_merge(
-              [
+        $data = array_merge(
+            [
                 'id' => $request->route('api_credential_id')
-              ],
-              $request->validated()
-            );
+            ],
+            $request->validated()
+        );
 
-            $user = $action->execute($data, $request->user());
+        $user = $action->execute($data, $request->user());
 
-            //throw success when action executes succesfully
-            return QioskApp::httpResponse(QioskApp::SUCCESS, ['message' => 'New Api has been updated!'], 200);
-        // });
+        //throw success when action executes succesfully
+        return QioskApp::httpResponse(QioskApp::SUCCESS, 'New Api has been updated!');
     }
 
     /**

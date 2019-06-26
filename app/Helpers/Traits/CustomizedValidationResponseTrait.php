@@ -16,10 +16,12 @@ trait CustomizedValidationResponseTrait
     {
         $response = new JsonResponse([
                  'status' => \QioskApp::FORM_ERROR,
+                 'code' => 422,
+                 'message' => 'The given data is invalid',
                  'payload' => [
-                    'message' => 'The given data is invalid',
                     'errors' => $validator->errors()
-                 ]], 422);
+                 ]
+             ], 422);
 
         throw new \Illuminate\Validation\ValidationException($validator, $response);
     }

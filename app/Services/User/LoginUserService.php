@@ -5,7 +5,7 @@ namespace App\Services\User;
 use App\User;
 use Illuminate\Support\Facades\Hash;
 use App\Services\ActionInterface;
-use App\Exceptions\UserException;
+use App\Exceptions\CustomException;
 
 class LoginUserService implements ActionInterface
 {
@@ -21,15 +21,15 @@ class LoginUserService implements ActionInterface
         $user = User::where('email', $data['email'])->first();
 
         if (!$user) {
-            throw new UserException('User not found : '.$data['email'], 200);
+            throw new CustomException('User not found : '.$data['email'], 200);
         }
 
         if (is_null($user->email_verified_at)) {
-            throw new UserException("Email ".$data['email']." not verified!", 200);
+            throw new CustomException("Email ".$data['email']." not verified!", 200);
         }
 
         if (!Hash::check($data['password'], $user->password)) {
-            throw new UserException('Password missmatch!', 200);
+            throw new CustomException('Password missmatch!', 200);
         }
 
         $user->token = $user->createToken('Laravel Password Grant Client')->accessToken;

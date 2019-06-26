@@ -3,7 +3,7 @@
 namespace App\Services\User;
 
 use App\User;
-use App\Exceptions\UserException;
+use App\Exceptions\CustomException;
 use Illuminate\Support\Facades\Hash;
 use App\Services\ActionInterface;
 use App\Events\UserSignedUpEvent;
@@ -30,7 +30,7 @@ class CreateUserService implements ActionInterface
 
         //throws an exception if user hasnt yet created
         if (!$user) {
-            throw new UserException('Registration falied!', 200);
+            throw new CustomException('Registration falied!', 200);
         }
 
         //Create User access token for stateless connection

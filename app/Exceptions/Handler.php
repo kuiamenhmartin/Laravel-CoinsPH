@@ -47,9 +47,22 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if ($exception instanceof UserException) {
-          //https://laraveldaily.com/laravel-api-errors-and-exceptions-how-to-return-responses/
-            return response()->json(['error' => $exception->getMessage()], $exception->getCode());
+        if ($exception instanceof ModelNotFoundException) {
+            return \QioskApp::httpResponse(
+                \QioskApp::ERROR,
+                'Entry for '.str_replace('App\\', '', $exception->getModel()).' not found',
+                [],
+                404
+            );
+        }
+
+        if ($exception instanceof CustomException) {
+            return \QioskApp::httpResponse(
+                \QioskApp::ERROR,
+                $exception->getMessage(),
+                [],
+                $exception->getCode()
+            );
         }
 
         return parent::render($request, $exception);
@@ -73,6 +86,11 @@ class Handler extends ExceptionHandler
         //         ? response()->json(['message' => $exception->getMessage()], 401)
         //         : redirect()->guest($redirect);
 
-        return response(['status' => \QioskApp::UNAUTHENTICATED, 'payload' => ['message' => 'Unauthenticated']], 401);
+        return \QioskApp::httpResponse(
+            \QioskApp::UNAUTHENTICATED,
+            $exception->getMessage(),
+            [],
+            401
+        );
     }
 }

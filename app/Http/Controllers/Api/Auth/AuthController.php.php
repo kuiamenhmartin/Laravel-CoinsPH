@@ -28,24 +28,18 @@ class AuthController extends Controller
 
     public function register(CreateUserRequest $request, CreateUserService $action)
     {
-        return QioskApp::checkAction(function() use($request, $action)
-        {
-            $user = $action->execute($request->validated());
+        $user = $action->execute($request->validated());
 
-            //throw success when action executes succesfully
-            return QioskApp::httpResponse(QioskApp::SUCCESS, ['token' => $user->token], 200);
-        });
+        //throw success when action executes succesfully
+        return QioskApp::httpResponse(QioskApp::SUCCESS, '', ['token' => $user->token]);
     }
 
     public function login(LoginUserRequest $request, LoginUserService $action)
     {
-        return QioskApp::checkAction(function() use($request, $action)
-        {
-            $user = $action->execute($request->validated());
+        $user = $action->execute($request->validated());
 
-            //throw success when action executes succesfully
-            return QioskApp::httpResponse(QioskApp::SUCCESS, ['token' => $user->token], 200);
-        });
+        //throw success when action executes succesfully
+        return QioskApp::httpResponse(QioskApp::SUCCESS, '', ['token' => $user->token]);
     }
 
     public function logout(Request $request)
@@ -53,18 +47,15 @@ class AuthController extends Controller
         $token = $request->user()->token();
         $token->revoke();
 
-        return QioskApp::httpResponse(QioskApp::SUCCESS, ['message' => 'You have been succesfully logged out!'], 200);
+        return QioskApp::httpResponse(QioskApp::SUCCESS, 'You have been succesfully logged out!');
     }
 
     public function signupActivate($token, ConfirmEmailService $action)
     {
-        return QioskApp::checkAction(function() use($token, $action)
-        {
-            $user = $action->execute([$token]);
+        $user = $action->execute([$token]);
 
-            //throw success when action executes succesfully
-            return QioskApp::httpResponse(QioskApp::SUCCESS, ['message' => 'Your email is now verified!'], 200);
-        });
+        //throw success when action executes succesfully
+        return QioskApp::httpResponse(QioskApp::SUCCESS, 'Your email is now verified!');
     }
 }
 

@@ -3,9 +3,12 @@
 namespace App\Http\Requests\User;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Helpers\Traits\CustomizedValidationResponseTrait;
 
 class LoginUserRequest extends FormRequest
 {
+    use CustomizedValidationResponseTrait;
+
     /**
      * Determine if the user is authorized to make this request.
      *

@@ -2,7 +2,7 @@
 
 namespace App\Services\Profile\ApiCredential;
 
-use App\Exceptions\UserException;
+use App\Exceptions\CustomException;
 
 use App\User;
 
@@ -20,7 +20,7 @@ class StoreService
         $result = $user->externalApis()->create($data);
 
         if (!$result) {
-            throw new UserException('Something went wrong, data not saved.', 200);
+            throw new CustomException('Something went wrong, data not saved.', 200);
         }
 
         return true;

@@ -5,7 +5,7 @@ namespace App\Services\User;
 use App\User;
 use Illuminate\Support\Facades\Hash;
 use App\Services\ActionInterface;
-use App\Exceptions\UserException;
+use App\Exceptions\CustomException;
 use Carbon\Carbon;
 
 class ConfirmEmailService implements ActionInterface
@@ -22,7 +22,7 @@ class ConfirmEmailService implements ActionInterface
         $user = User::where(['activation_token' => $token[0], 'email_verified_at' => null])->first();
 
         if (!$user) {
-            throw new UserException('This activation token is invalid.', 404);
+            throw new CustomException('This activation token is invalid.', 404);
         }
 
         $user->email_verified_at = Carbon::now();

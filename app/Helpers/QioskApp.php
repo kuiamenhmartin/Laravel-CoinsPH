@@ -7,6 +7,8 @@ use Illuminate\Http\Response;
 #Import Custom Exceptions
 use App\Exceptions\UserException;
 
+use Illuminate\Support\Arr;
+
 /**
 * GLOBAL CONSTANTS of the APP
 */
@@ -24,27 +26,6 @@ class QioskApp
     #User is not authenticated
     const UNAUTHENTICATED = 'UNAUTHENTICATED';
 
-
-    /**
-     * To avoid redundantly use try catch we will just use closure function
-     * @method checkAction
-     * @param  closure $action Closure function
-     * @return User|HttpResponse
-     */
-    public static function checkAction($action)
-    {
-        try {
-            return $action();
-        } catch (UserException $exception) {
-
-            return QioskApp::httpResponse(
-                QioskApp::ERROR,
-                ['message' => $exception->getMessage()],
-                $exception->getCode()
-            );
-        }
-    }
-
     /**
      * Create custom response for entire app
      * @method customResponse
@@ -53,11 +34,15 @@ class QioskApp
      * @param  int $code   repose code
      * @return Response http reponse type
      */
-    public static function httpResponse(string $status, array $data, int $code): Response
+    public static function httpResponse(string $status, string $msg = '', array $pload = [], int $code = 200): Response
     {
-        return response([
+        $responseData = [
             'status' => $status,
-            'payload' => $data
-          ], $code ?? 400);
+            'code' => $code,
+            'message' => $msg,
+            'payload' => $pload
+        ];
+
+        return response(array_filter($responseData), $code);
     }
 }

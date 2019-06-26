@@ -2,7 +2,7 @@
 
 namespace App\Services\Profile\ApiCredential;
 
-use App\Exceptions\UserException;
+use App\Exceptions\CustomException;
 use Illuminate\Support\Arr;
 use App\User;
 
@@ -23,14 +23,14 @@ class UpdateService
         $apiCredential = $user->externalApis()->find($data['id'])->where('is_active', 1);
 
         if (!$apiCredential) {
-            throw new UserException('No record found.', 200);
+            throw new CustomException('Resource not found.', 200);
         }
 
         //update the record
         $finalResult = $apiCredential->update($updatedValue);
 
         if (!$finalResult) {
-            throw new UserException('Something went wrong, data not saved.', 200);
+            throw new CustomException('Something went wrong, data not saved.', 200);
         }
 
         return true;
