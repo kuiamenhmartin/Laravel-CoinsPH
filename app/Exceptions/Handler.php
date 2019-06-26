@@ -47,6 +47,11 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof UserException) {
+          //https://laraveldaily.com/laravel-api-errors-and-exceptions-how-to-return-responses/
+            return response()->json(['error' => $exception->getMessage()], $exception->getCode());
+        }
+
         return parent::render($request, $exception);
     }
 

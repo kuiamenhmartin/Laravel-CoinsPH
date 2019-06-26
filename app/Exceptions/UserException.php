@@ -17,7 +17,7 @@ class UserException extends Exception
        //   parent::report($exception);
      }
 
-      public function render($request)
+      public function render()
       {
         // dd($exception);
       }
