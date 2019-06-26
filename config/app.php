@@ -180,6 +180,9 @@ return [
         //Custom Providers for Repositories
         App\Repositories\RepositoryServiceProvider::class,
 
+        //Input sanitizer https://github.com/Waavi/Sanitizer
+        Waavi\Sanitizer\Laravel\SanitizerServiceProvider::class,
+
     ],
 
     /*
@@ -231,6 +234,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'QioskApp' => App\Helpers\QioskApp::class,
+        'Sanitizer' => Waavi\Sanitizer\Laravel\Facade::class,
 
     ],
 

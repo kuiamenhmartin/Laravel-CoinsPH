@@ -30,7 +30,7 @@ class AuthController extends Controller
     {
         return QioskApp::checkAction(function() use($request, $action)
         {
-            $user = $action->execute($request->all());
+            $user = $action->execute($request->validated());
 
             //throw success when action executes succesfully
             return QioskApp::httpResponse(QioskApp::SUCCESS, ['token' => $user->token], 200);
@@ -41,7 +41,7 @@ class AuthController extends Controller
     {
         return QioskApp::checkAction(function() use($request, $action)
         {
-            $user = $action->execute($request->all());
+            $user = $action->execute($request->validated());
 
             //throw success when action executes succesfully
             return QioskApp::httpResponse(QioskApp::SUCCESS, ['token' => $user->token], 200);
@@ -50,12 +50,6 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-      // if (Gate::allows('create-tasks', $request)) {
-      //    echo 'Allowed';
-      //  } else {
-      //    echo 'Not Allowed';
-      //  }
-      //   // dd(auth()->user());
         $token = $request->user()->token();
         $token->revoke();
 

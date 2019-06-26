@@ -11,12 +11,14 @@ class UserException extends Exception
      *
      * @return void
      */
-    public function report()
-    {
+     public function report()
+     {
+       // dd($exception);
+       //   parent::report($exception);
+     }
 
-    }
-
-    public function render($request)
-    {
-    }
+      public function render($request)
+      {
+        // dd($exception);
+      }
 }

@@ -26,9 +26,6 @@ class CreateUserExternalApiCredentialsTable extends Migration
           //FOREIGN KEY CONSTRAINTS
           $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 
-          //SETTING THE PRIMARY KEYS
-          $table->primary(['id']);
-
         });
     }
 

@@ -9,8 +9,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Profile\CredentialRequest;
 
 #Import Custom Services
-use App\Services\Profile\ApiCredentialStoreService;
-use App\Services\Profile\ApiCredentialUpdateService;
+use App\Services\Profile\ApiCredential\StoreService;
+use App\Services\Profile\ApiCredential\UpdateService;
 
 #Import App Helper
 use App\Helpers\QioskApp;
@@ -42,15 +42,15 @@ class ApiCredentialController extends Controller
      *
      * @return Response
      */
-    public function store(CredentialRequest $request, ApiCredentialStoreService $action)
+    public function store(CredentialRequest $request, StoreService $action)
     {
-        return QioskApp::checkAction(function () use ($request, $action) {
+        // return QioskApp::checkAction(function () use ($request, $action) {
 
-            $user = $action->execute($request->all());
+            $user = $action->execute($request->validated(), $request->user());
 
             //throw success when action executes succesfully
             return QioskApp::httpResponse(QioskApp::SUCCESS, ['message' => 'New Api has been added!'], 200);
-        });
+        // });
     }
 
     /**
@@ -81,17 +81,21 @@ class ApiCredentialController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function update(CredentialRequest $request, ApiCredentialUpdateService $action)
+    public function update(CredentialRequest $request, UpdateService $action)
     {
-        $data = array_merge(['id' => $request->route('api_credential_id')], $request->all());
+        // return QioskApp::checkAction(function () use ($request, $action) {
+            $data = array_merge(
+              [
+                'id' => $request->route('api_credential_id')
+              ],
+              $request->validated()
+            );
 
-        return QioskApp::checkAction(function () use ($data, $action) {
-
-            $user = $action->execute($data);
+            $user = $action->execute($data, $request->user());
 
             //throw success when action executes succesfully
             return QioskApp::httpResponse(QioskApp::SUCCESS, ['message' => 'New Api has been updated!'], 200);
-        });
+        // });
     }
 
     /**
