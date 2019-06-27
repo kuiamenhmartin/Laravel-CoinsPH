@@ -12,9 +12,13 @@ class CreateUserService implements ActionInterface
 {
     protected $signedUpEvent;
 
-    public function __construct(UserSignedUpEvent $signedUpEvent)
+    protected $User;
+
+    public function __construct(UserSignedUpEvent $signedUpEvent, User $User)
     {
         $this->signedUpEvent = $signedUpEvent;
+
+        $this->User = $User;
     }
 
     public function execute(array $data) : User
@@ -26,11 +30,11 @@ class CreateUserService implements ActionInterface
         $data['activation_token'] = str_random(60);
 
         //Now we create the user by adding it to our DB
-        $user = User::create($data);
+        $user = $this->User::create($data);
 
         //throws an exception if user hasnt yet created
         if (!$user) {
-            throw new CustomException('Registration falied!', 200);
+            throw new CustomException('Registration falied!', 500);
         }
 
         //Create User access token for stateless connection

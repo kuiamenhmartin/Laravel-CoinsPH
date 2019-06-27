@@ -17,7 +17,7 @@ class UserExternalApiCredentials extends Model
      * @var array
      */
     protected $fillable = [
-        'app_name', 'client_id', 'client_secret', 'is_active'
+        'app_name', 'client_id', 'client_secret', 'scopes', 'redirect_uri', 'is_active'
     ];
 
     /**

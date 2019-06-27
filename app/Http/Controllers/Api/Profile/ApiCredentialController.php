@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Profile;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 
 #Import Custom Requests
@@ -11,6 +12,7 @@ use App\Http\Requests\Profile\CredentialRequest;
 #Import Custom Services
 use App\Services\Profile\ApiCredential\StoreService;
 use App\Services\Profile\ApiCredential\UpdateService;
+use App\Services\Profile\ApiCredential\DeleteService;
 
 #Import App Helper
 use App\Helpers\QioskApp;
@@ -18,31 +20,11 @@ use App\Helpers\QioskApp;
 class ApiCredentialController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @return Response
      */
-    public function store(CredentialRequest $request, StoreService $action)
+    public function store(CredentialRequest $request, StoreService $action): Response
     {
         $user = $action->execute($request->validated(), $request->user());
 
@@ -51,34 +33,12 @@ class ApiCredentialController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  int  $id
      * @return Response
      */
-    public function update(CredentialRequest $request, UpdateService $action)
+    public function update(CredentialRequest $request, UpdateService $action): Response
     {
         $data = array_merge(
             [
@@ -87,7 +47,7 @@ class ApiCredentialController extends Controller
             $request->validated()
         );
 
-        $user = $action->execute($data, $request->user());
+        $action->execute($data, $request->user());
 
         //throw success when action executes succesfully
         return QioskApp::httpResponse(QioskApp::SUCCESS, 'New Api has been updated!');
@@ -99,8 +59,11 @@ class ApiCredentialController extends Controller
      * @param  int  $id
      * @return Response
      */
-    public function destroy($id)
+    public function destroy($id, Request $request, DeleteService $action): Response
     {
-        //
+        $action->execute(["id" => $id], $request->user());
+
+        //throw success when action executes succesfully
+        return QioskApp::httpResponse(QioskApp::SUCCESS, 'Your Api has been deleted!');
     }
 }

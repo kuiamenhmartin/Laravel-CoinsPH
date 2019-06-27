@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
 |
+| Adding State Parameter in API Request : https://youtu.be/_xrhWLqX1j0
 */
 
 #Routes for authentication
@@ -34,8 +35,9 @@ Route::group([
     'middleware' => ['auth:api','verified'],
     'prefix' => 'profile'
 ], function () {
-    Route::post('credential/add', 'Api\Profile\ApiCredentialController@store')->name('api.credential.store');
-    Route::post('credential/{api_credential_id}/update', 'Api\Profile\ApiCredentialController@update')->name('api.credential.update');
+    Route::post('credential', 'Api\Profile\ApiCredentialController@store')->name('api.credential.store');
+    Route::patch('credential/{api_credential_id}', 'Api\Profile\ApiCredentialController@update')->name('api.credential.update');
+    Route::delete('credential/{api_credential_id}', 'Api\Profile\ApiCredentialController@destroy')->name('api.credential.delete');
 });
 
 #Define fallback route

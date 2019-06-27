@@ -19,6 +19,8 @@ class CreateUserExternalApiCredentialsTable extends Migration
               $table->string('app_name')->unique();
               $table->string('client_id')->unique();
               $table->string('client_secret')->unique();
+              $table->string('scopes');
+              $table->string('redirect_uri');
               $table->boolean('is_active')->default(true);
               $table->softDeletes();
               $table->timestamps();

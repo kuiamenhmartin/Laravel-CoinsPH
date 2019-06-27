@@ -11,6 +11,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Traits\HasPermissionsTrait;
 use App\Models\Traits\UsersTrait;
 
+use Carbon\Carbon;
+
 class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens, Notifiable, SoftDeletes, HasPermissionsTrait, UsersTrait;
@@ -41,4 +43,16 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Check if email_verified_at not ahead of date Now()
+     *
+     * @method isEmailVerifiedDateValid
+     * @return boolean
+     */
+    public function isEmailVerifiedDateValid(): bool
+    {
+      return (Carbon::now() > $this->email_verified_at);
+    }
+
 }

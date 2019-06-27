@@ -20,17 +20,17 @@ class UpdateService
         $updatedValue = Arr::except($data, ['id']);
 
         //find the record in the db before update
-        $apiCredential = $user->externalApis()->find($data['id'])->where('is_active', 1);
+        $apiCredential = $user->apis()->find($data['id'])->where('is_active', 1);
 
         if (!$apiCredential) {
-            throw new CustomException('Resource not found.', 200);
+            throw new CustomException('Resource not found.', 402);
         }
 
         //update the record
         $finalResult = $apiCredential->update($updatedValue);
 
         if (!$finalResult) {
-            throw new CustomException('Something went wrong, data not saved.', 200);
+            throw new CustomException('Something went wrong, data not saved.', 500);
         }
 
         return true;

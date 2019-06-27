@@ -3,8 +3,14 @@
 namespace App\Exceptions;
 
 use Exception;
-use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
+use Illuminate\Auth\AuthenticationException;
+use Illuminate\Auth\Access\AuthorizationException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Validation\ValidationException;
+use App\Exceptions\CustomException;
 
 class Handler extends ExceptionHandler
 {
@@ -47,23 +53,34 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if ($exception instanceof ModelNotFoundException) {
-            return \QioskApp::httpResponse(
-                \QioskApp::ERROR,
-                'Entry for '.str_replace('App\\', '', $exception->getModel()).' not found',
-                [],
-                404
-            );
-        }
+        if ($request->wantsJson()) {
 
-        if ($exception instanceof CustomException) {
+          $defaultException = array('MethodNotAllowedHttpException', 'HttpException');
+          $className = class_basename($exception);
+
+          if ($exception instanceof ModelNotFoundException) {
+              return \QioskApp::httpResponse(
+                  \QioskApp::ERROR,
+                  'Entry for '.str_replace('App\\', '', $exception->getModel()).' not found',
+                  [],
+                  404
+              );
+          } elseif ($exception instanceof CustomException) {
+              return \QioskApp::httpResponse(
+                  \QioskApp::ERROR,
+                  $exception->getMessage(),
+                  [],
+                  $exception->getCode()
+              );
+          } elseif(in_array($className , $defaultException)) {
             return \QioskApp::httpResponse(
                 \QioskApp::ERROR,
                 $exception->getMessage(),
                 [],
-                $exception->getCode()
+                $exception->getStatusCode()
             );
-        }
+          }
+      }
 
         return parent::render($request, $exception);
     }

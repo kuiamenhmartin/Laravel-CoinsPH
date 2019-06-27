@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 
 #Import Custom Requests
@@ -21,20 +22,12 @@ use Illuminate\Support\Facades\Gate;
 
 class AuthController extends Controller
 {
-    public function __construct()
-    {
-        //
-    }
-
-    public function register(CreateUserRequest $request, CreateUserService $action)
-    {
-        $user = $action->execute($request->validated());
-
-        //throw success when action executes succesfully
-        return QioskApp::httpResponse(QioskApp::SUCCESS, '', ['token' => $user->token]);
-    }
-
-    public function login(LoginUserRequest $request, LoginUserService $action)
+    /**
+     * Register a user to our platform
+     *
+     * @return Response
+     */
+    public function register(CreateUserRequest $request, CreateUserService $action): Response
     {
         $user = $action->execute($request->validated());
 
@@ -42,7 +35,25 @@ class AuthController extends Controller
         return QioskApp::httpResponse(QioskApp::SUCCESS, '', ['token' => $user->token]);
     }
 
-    public function logout(Request $request)
+    /**
+     * Login a user to our platform
+     *
+     * @return Response
+     */
+    public function login(LoginUserRequest $request, LoginUserService $action): Response
+    {
+        $user = $action->execute($request->validated());
+
+        //throw success when action executes succesfully
+        return QioskApp::httpResponse(QioskApp::SUCCESS, '', ['token' => $user->token]);
+    }
+
+    /**
+     * Logout user to our platform
+     *
+     * @return Response
+     */
+    public function logout(Request $request): Response
     {
         $token = $request->user()->token();
         $token->revoke();
@@ -50,7 +61,12 @@ class AuthController extends Controller
         return QioskApp::httpResponse(QioskApp::SUCCESS, 'You have been succesfully logged out!');
     }
 
-    public function signupActivate($token, ConfirmEmailService $action)
+    /**
+     * Confirm email upon successfull registration
+     *
+     * @return Response
+     */
+    public function signupActivate($token, ConfirmEmailService $action): Response
     {
         $user = $action->execute([$token]);
 

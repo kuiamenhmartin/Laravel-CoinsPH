@@ -6,30 +6,31 @@ use App\User;
 use Illuminate\Support\Facades\Hash;
 use App\Services\ActionInterface;
 use App\Exceptions\CustomException;
+use Carbon;
 
 class LoginUserService implements ActionInterface
 {
-    protected $signedUp;
+    protected $User;
 
-    public function __construct()
+    public function __construct(User $User)
     {
-        //
+        $this->User = $User;
     }
 
     public function execute(array $data) : User
     {
-        $user = User::where('email', $data['email'])->first();
+        $user = $this->User::where('email', $data['email'])->first();
 
         if (!$user) {
-            throw new CustomException('User not found : '.$data['email'], 200);
+            throw new CustomException('User not found : '.$data['email'], 500);
         }
 
-        if (is_null($user->email_verified_at)) {
-            throw new CustomException("Email ".$data['email']." not verified!", 200);
+        if (is_null($user->email_verified_at) || !$user->isEmailVerifiedDateValid()) {
+            throw new CustomException("Email ".$data['email']." not verified!", 500);
         }
 
         if (!Hash::check($data['password'], $user->password)) {
-            throw new CustomException('Password missmatch!', 200);
+            throw new CustomException('Email or password missmatched!', 500);
         }
 
         $user->token = $user->createToken('Laravel Password Grant Client')->accessToken;

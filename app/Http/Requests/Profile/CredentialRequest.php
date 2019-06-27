@@ -35,10 +35,15 @@ class CredentialRequest extends FormRequest
          */
         $uniqueValue = $this->forUniqueValueRule($request->route('api_credential_id'));
 
+        //same rules applicable to all fields
+        $ruleS = "required|string|max:255|unique:user_external_api_credentials,app_name{$uniqueValue}";
+
         return [
-            'app_name' => "required|string|max:255|unique:user_external_api_credentials,app_name{$uniqueValue}",
-            'client_id' => "required|string|min:5|max:255|unique:user_external_api_credentials,client_id{$uniqueValue}",
-            'client_secret' => "required|string|min:5|unique:user_external_api_credentials,client_secret{$uniqueValue}"
+            'app_name' => $ruleS,
+            'scopes' => $ruleS,
+            'client_id' => $ruleS,
+            'client_secret' => $ruleS,
+            'redirect_uri' => $ruleS
         ];
     }
 
