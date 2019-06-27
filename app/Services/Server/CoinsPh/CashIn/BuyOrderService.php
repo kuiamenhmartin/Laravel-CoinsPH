@@ -4,9 +4,9 @@ namespace App\Services\Profile\ApiCredential;
 
 use App\Exceptions\CustomException;
 
-use App\User;
+use App\Services\Server\CoinsPh\Interfaces\CashInInterface;
 
-class BuyOrderService
+class BuyOrderService implements CashInInterface
 {
     public function __construct()
     {
