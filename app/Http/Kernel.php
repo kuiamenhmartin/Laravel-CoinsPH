@@ -68,6 +68,7 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'json.response' => \App\Http\Middleware\ForceJsonResponseMiddleware::class,
         'client' => CheckClientCredentials::class,
+        'api.credential' => \App\Services\Server\CoinsPh\CheckCredentialMiddleware::class,
     ];
 
     /**

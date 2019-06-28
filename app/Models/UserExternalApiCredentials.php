@@ -28,4 +28,32 @@ class UserExternalApiCredentials extends Model
     protected $hidden = [
         'client_secret'
     ];
+
+    /**
+     * Table name used by this model
+     * @var string
+     */
+    protected $table = 'user_external_api_credentials';
+
+    /**
+     * Set app_name to lowercase
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setAppNameAttribute($value)
+    {
+        $this->attributes['app_name'] = strtolower($value);
+    }
+
+    /**
+     * Set scopes to lowercase
+     *
+     * @param  string  $value
+     * @return void
+     */
+    public function setScopesAttribute($value)
+    {
+        $this->attributes['scopes'] = strtolower($value);
+    }
 }
