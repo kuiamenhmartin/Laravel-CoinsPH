@@ -43,7 +43,8 @@ class CredentialRequest extends FormRequest
             'scopes' => $ruleS,
             'client_id' => $ruleS,
             'client_secret' => $ruleS,
-            'redirect_uri' => $ruleS
+            'redirect_uri' => $ruleS,
+            'authentication_uri' => $ruleS,
         ];
     }
 

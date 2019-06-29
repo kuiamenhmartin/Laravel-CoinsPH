@@ -52,7 +52,6 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function isEmailVerifiedDateValid(): bool
     {
-      return (Carbon::now() > $this->email_verified_at);
+        return (Carbon::now() > $this->email_verified_at);
     }
-
 }

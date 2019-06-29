@@ -29,13 +29,13 @@ class CreateNewBuyerController extends Controller
      */
     public function __invoke(Request $request)
     {
-      \Config::get('coinsph');
-      // dd('dsada');
-      // $apis = UserExternalApiCredentials::all();
-      // dd($apis);
-        // $user = $action->execute($request->validated(), $request->user());
-        //
-        // //throw success when action executes succesfully
-        // return QioskApp::httpResponse(QioskApp::SUCCESS, 'New Api has been added!');
+        \Config::get('coinsph');
+          // dd('dsada');
+          // $apis = UserExternalApiCredentials::all();
+          // dd($apis);
+            // $user = $action->execute($request->validated(), $request->user());
+            //
+            // //throw success when action executes succesfully
+            // return QioskApp::httpResponse(QioskApp::SUCCESS, 'New Api has been added!');
     }
 }

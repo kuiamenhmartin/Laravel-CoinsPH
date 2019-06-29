@@ -21,7 +21,7 @@ class CashInService implements CashInInterface
      */
     public function createNewBuyer(): void
     {
-
+        //
     }
 
 

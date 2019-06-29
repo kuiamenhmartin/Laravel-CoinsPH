@@ -6,46 +6,63 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 
-use App\Models\UserExternalApiCredentials;
-use App\User;
+use Illuminate\Support\Arr;
 
-#Import Service
-use App\Services\Server\CoinsPh\Adapters\Gateway\FetchConfigService;
+// Import Service
+use App\Services\Server\CoinsPh\Adapters\Gateway\ApiCredentialService;
+use App\Services\Server\CoinsPh\Adapters\Gateway\ValidateCodeAndStateService;
+use App\Services\Server\CoinsPh\Adapters\Gateway\AccessTokenService;
+use App\Services\Server\CoinsPh\Adapters\Gateway\RefreshTokenService;
 
-#Import App Helpers
+// Import App Helpers
 use App\Helpers\QioskApp;
 
 class GatewayController extends Controller
 {
-      /**
-       * Create an new buyer
-       *
-       * For complete ref -> https://docs.coins.asia/docs/create-buyorder
-       *
-       * @param Request
-       *
-       * @return Response
-       */
-      public function getConfig(FetchConfigService $action)
-      {
-          $parameters = ['app_name' => request()->route('app_name'), 'user_id' => request()->user()->id];
+    /**
+    * Create an new buyer
+    *
+    * For complete ref -> https://docs.coins.asia/docs/create-buyorder
+    *
+    * @param $action ApiCredentialService
+    *
+    * @return Response
+    */
+    public function getConfig(ApiCredentialService $action): Response
+    {
+        $appName = request()->route('app_name');
 
-          //Get configuration
-          $result = $action->execute($parameters);
+        $parameters = ['app_name' => $appName, 'token' => request()->bearerToken(), 'user_id' => request()->user()->id];
 
-          //throw success when action executes succesfully
-          return QioskApp::httpResponse(QioskApp::SUCCESS, 'Your config for app : '.$parameters['app_name'], $result);
-      }
+        $result = $action->execute($parameters);
 
-      public function callback()
-      {
-          $respo = request()->all();
+        //throw success when action executes succesfully
+        return QioskApp::httpResponse(QioskApp::SUCCESS, sprintf('Your API Credential for %s', $appName), $result);
+    }
 
-          if(isset($respo['code'])) {
-              return redirect('api/coinsph/token/'.$respo['code']);
-          }
+    /**
+     * The callback where the authorization server will redirect
+     * This will give us the code that we will be using to get api_token
+     *
+     * @param $validationAction ValidateCodeAndStateService
+     * @param $accessTokenAction AccessTokenService
+     *
+     * @return Response
+     */
+    public function callback(ValidateCodeAndStateService $validationAction, AccessTokenService $accessTokenAction): Response
+    {
+        $appName = request()->route('app_name');
 
-          return  redirect('api/reg/'.$respo['access_token']);
-      }
+        $parameters = Arr::add(request()->all(), 'app_name', $appName);
 
+        $validated = $validationAction->execute($parameters);
+
+        $yourApiToken = $accessTokenAction->execute($validated);
+
+        //throw success when action executes succesfully
+        return QioskApp::httpResponse(QioskApp::SUCCESS, sprintf('Your are now connected to %s', $appName), [
+            'atoken' => $yourApiToken,
+            'ptoken' => $validated['token']
+        ]);
+    }
 }

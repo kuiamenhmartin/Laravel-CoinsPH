@@ -50,7 +50,7 @@ class ApiCredentialController extends Controller
         $action->execute($data, $request->user());
 
         //throw success when action executes succesfully
-        return QioskApp::httpResponse(QioskApp::SUCCESS, 'New Api has been updated!');
+        return QioskApp::httpResponse(QioskApp::SUCCESS, 'Your Api has been updated!');
     }
 
     /**
@@ -64,6 +64,6 @@ class ApiCredentialController extends Controller
         $action->execute(["id" => $id], $request->user());
 
         //throw success when action executes succesfully
-        return QioskApp::httpResponse(QioskApp::SUCCESS, 'Your Api has been deleted!');
+        return QioskApp::httpResponse(QioskApp::SUCCESS, 'Your Api has been permanently deleted!');
     }
 }

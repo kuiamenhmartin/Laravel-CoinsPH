@@ -14,20 +14,20 @@ class CreateUserExternalApiCredentialsTable extends Migration
     public function up()
     {
         Schema::create('user_external_api_credentials', function (Blueprint $table) {
-            $table->bigInteger('id')->autoIncrement();
-              $table->unsignedBigInteger('user_id');
-              $table->string('app_name')->unique();
-              $table->string('client_id')->unique();
-              $table->string('client_secret')->unique();
-              $table->string('scopes');
-              $table->string('redirect_uri');
-              $table->boolean('is_active')->default(true);
-              $table->softDeletes();
-              $table->timestamps();
+            $table->bigIncrements('id')->unsigned();
+            $table->unsignedBigInteger('user_id');
+            $table->string('app_name')->unique();
+            $table->string('client_id')->unique();
+            $table->string('client_secret')->unique();
+            $table->string('scopes');
+            $table->string('redirect_uri');
+            $table->string('authentication_uri');
+            $table->boolean('is_active')->default(true);
+            $table->softDeletes();
+            $table->timestamps();
 
-          //FOREIGN KEY CONSTRAINTS
-          $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-
+            //FOREIGN KEY CONSTRAINTS
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
