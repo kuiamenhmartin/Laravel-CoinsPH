@@ -21,8 +21,11 @@ class StoreService
         //add new api credentials
         $result = $user->apis()->create($data);
 
-        if (!$result) {
-            throw new CustomException('Something went wrong, data not saved.', 500);
-        }
+        throw_if(
+            !$result,
+            CustomException::class,
+            sprintf('Something went wrong, data not saved.'),
+            500
+        );
     }
 }

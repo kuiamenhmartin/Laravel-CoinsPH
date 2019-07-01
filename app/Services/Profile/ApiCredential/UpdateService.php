@@ -22,16 +22,22 @@ class UpdateService
         //find the record in the db before update
         $apiCredential = $user->apis()->find($data['id'])->where('is_active', 1);
 
-        if (!$apiCredential) {
-            throw new CustomException('Resource not found.', 402);
-        }
+        throw_if(
+            !$apiCredential,
+            CustomException::class,
+            sprintf('Resource not found.'),
+            402
+        );
 
         //update the record
         $finalResult = $apiCredential->update($updatedValue);
 
-        if (!$finalResult) {
-            throw new CustomException('Something went wrong, data not saved.', 500);
-        }
+        throw_if(
+            !$finalResult,
+            CustomException::class,
+            sprintf('Something went wrong, data not saved.'),
+            500
+        );
 
         return true;
     }

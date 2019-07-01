@@ -14,6 +14,9 @@ use App\Services\Profile\ApiCredential\StoreService;
 use App\Services\Profile\ApiCredential\UpdateService;
 use App\Services\Profile\ApiCredential\DeleteService;
 
+#Import Laravel Helper
+use Illuminate\Support\Arr;
+
 #Import App Helper
 use App\Helpers\QioskApp;
 
@@ -40,12 +43,7 @@ class ApiCredentialController extends Controller
      */
     public function update(CredentialRequest $request, UpdateService $action): Response
     {
-        $data = array_merge(
-            [
-                'id' => $request->route('api_credential_id')
-            ],
-            $request->validated()
-        );
+        $data = Arr::add($request->validated(), 'id', $request->route('api_credential_id'));
 
         $action->execute($data, $request->user());
 

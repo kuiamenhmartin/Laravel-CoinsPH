@@ -30,8 +30,11 @@ class DeleteService
         //delete softly
         $result = $apiCredential->delete();
 
-        if (!$result) {
-            throw new CustomException('Something went wrong, data not saved.', 500);
-        }
+        throw_if(
+            !$result,
+            CustomException::class,
+            sprintf('Something went wrong, data not saved.'),
+            500
+        );
     }
 }
