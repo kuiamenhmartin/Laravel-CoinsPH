@@ -25,7 +25,7 @@ class CheckCredentialMiddleware
          * Get your api credential
          * @var [type]
          */
-        $apis = $request->user()->getAppCredential($request->route('app_name'))->first();
+        $apis = $request->user()->getApiCredential($request->route('app_name'))->first();
 
         //when api credential not provied
         if (is_null($apis)) {

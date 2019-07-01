@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Arr;
 
 // Import Service
-use App\Services\Server\CoinsPh\Adapters\Gateway\ApiCredentialService;
+use App\Services\Server\CoinsPh\Adapters\Gateway\GenerateApiParameterService;
 use App\Services\Server\CoinsPh\Adapters\Gateway\ValidateCodeAndStateService;
 use App\Services\Server\CoinsPh\Adapters\Gateway\AccessTokenService;
 use App\Services\Server\CoinsPh\Adapters\Gateway\RefreshTokenService;
@@ -24,11 +24,11 @@ class GatewayController extends Controller
     *
     * For complete ref -> https://docs.coins.asia/docs/create-buyorder
     *
-    * @param $action ApiCredentialService
+    * @param $action GenerateApiParameterService
     *
     * @return Response
     */
-    public function getConfig(ApiCredentialService $action): Response
+    public function getConfig(GenerateApiParameterService $action): Response
     {
         $appName = request()->route('app_name');
 

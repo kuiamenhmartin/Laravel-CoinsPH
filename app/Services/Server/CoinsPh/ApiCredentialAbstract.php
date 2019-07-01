@@ -67,13 +67,13 @@ abstract class ApiCredentialAbstract
                     'Accept' => 'application/json'
                 ]
             ]);
-        } catch (ClientException $e) {
-            $error = $e->getMessage();
+        } catch (\Exception $exception) {
+            $error = $exception->getMessage();
 
             throw_if(
                 !is_null($error),
                 CustomException::class,
-                'Unauthorized request',
+                $error,
                 401
             );
         }

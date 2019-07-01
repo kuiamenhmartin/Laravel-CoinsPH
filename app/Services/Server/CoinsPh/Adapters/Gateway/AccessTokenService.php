@@ -4,6 +4,7 @@ namespace App\Services\Server\CoinsPh\Adapters\Gateway;
 
 use App\Services\Server\CoinsPh\ApiCredentialAbstract;
 use App\Models\UserExternalApiCredentialTokens;
+use App\Services\Server\CoinsPh\ApiCredentialService;
 use App\User;
 
 use Illuminate\Support\Arr;
@@ -11,8 +12,17 @@ use GuzzleHttp\Client;
 
 class AccessTokenService extends ApiCredentialAbstract
 {
-    public function __construct(User $UserModel, UserExternalApiCredentialTokens $ApiTokenModel, Client $GuzzleClient)
-    {
+    protected $ApiCredential;
+
+    public function __construct(
+        User $UserModel,
+        UserExternalApiCredentialTokens $ApiTokenModel,
+        Client $GuzzleClient,
+        ApiCredentialService $ApiCredential
+    ) {
+
+        $this->ApiCredential = $ApiCredential;
+
         //Pass User instance to our Parent Abstract Class
         parent::__construct($UserModel, $ApiTokenModel, $GuzzleClient);
     }
@@ -26,8 +36,9 @@ class AccessTokenService extends ApiCredentialAbstract
      */
     public function execute(array $data): string
     {
-        $yourApiConfig = $this->getApiCredentials($data['subid'], $data['app_name']);
+        $yourApiConfig =  $this->ApiCredential->execute($data['subid'], $data['app_name']);
 
+        //Get access_token via authorization_code
         $tokens = $this->requestForAccessToken($yourApiConfig->authentication_uri, [
             'client_id' => $yourApiConfig->client_id,
             'client_secret' => $yourApiConfig->client_secret,
@@ -41,7 +52,7 @@ class AccessTokenService extends ApiCredentialAbstract
         //Save refresh token to db
         $this->saveRefreshToken($tokens);
 
-        //throw access_token
+        //throw new access_token
         return $tokens['access_token'];
     }
 }

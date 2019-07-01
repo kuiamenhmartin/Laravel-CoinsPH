@@ -3,21 +3,15 @@
 namespace App\Services\Server\CoinsPh\Adapters\Gateway;
 
 use App\Exceptions\CustomException;
-
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-
 use Carbon\Carbon;
-
-use App\User;
 
 class ValidateCodeAndStateService
 {
-    protected $user;
-
-    public function __construct(User $user)
+    public function __construct()
     {
-        $this->user = $user;
+        //
     }
 
     /**
