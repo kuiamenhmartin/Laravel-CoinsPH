@@ -32,7 +32,7 @@ class AuthController extends Controller
         $user = $action->execute($request->validated());
 
         //throw success when action executes succesfully
-        return QioskApp::httpResponse(QioskApp::SUCCESS, '', ['token' => $user->token]);
+        return QioskApp::httpResponse(QioskApp::SUCCESS, 'You have successfully signed up. Please verify your email to use this app.');
     }
 
     /**
@@ -45,7 +45,7 @@ class AuthController extends Controller
         $user = $action->execute($request->validated());
 
         //throw success when action executes succesfully
-        return QioskApp::httpResponse(QioskApp::SUCCESS, '', ['token' => $user->token]);
+        return QioskApp::httpResponse(QioskApp::SUCCESS, '', ['token' => $user->token, 'name' => $user->name]);
     }
 
     /**

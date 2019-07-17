@@ -23,6 +23,12 @@ class QioskApp
     #Successful transaction
     const SUCCESS = 'SUCCESS';
 
+    #Successful transaction
+    const DANGER = 'DANGER';
+
+    #Successful transaction
+    const INFO = 'INFO';
+
     #User is not authenticated
     const UNAUTHENTICATED = 'UNAUTHENTICATED';
 

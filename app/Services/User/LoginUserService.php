@@ -22,7 +22,7 @@ class LoginUserService implements ActionInterface
         $user = $this->User::where('email', $data['email'])->first();
 
         if (!$user) {
-            throw new CustomException('User not found : '.$data['email'], 500);
+            throw new CustomException('Email or password is invalid!', 500);
         }
 
         if (is_null($user->email_verified_at) || !$user->isEmailVerifiedDateValid()) {
