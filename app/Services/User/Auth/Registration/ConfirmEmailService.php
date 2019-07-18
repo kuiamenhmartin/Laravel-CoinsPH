@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\User;
+namespace App\Services\User\Auth\Registration;
 
 use App\User;
 use Illuminate\Support\Facades\Hash;
@@ -25,7 +25,7 @@ class ConfirmEmailService implements ActionInterface
         // Decode and Unserialize token to extract created and activation_token it contians
         $filteredData = array_filter(\QioskApp::unserializeParams($token[0]));
 
-        if (!$this->checkIfEmailTokenIsValid($filteredData['email'])) {
+        if (!$this->isEmailTokenValid($filteredData['email'])) {
             throw new CustomException('This activation token is invalid.', 404);
         }
 
@@ -40,5 +40,24 @@ class ConfirmEmailService implements ActionInterface
         $user->save();
 
         return $user;
+    }
+
+    /**
+     * Validate Email Token, make sure it has the data that we originally pass to the api
+     *
+     * @param string $emailToken will be converted to array to get created and activation_token
+     * @return boolean
+     */
+    private function isEmailTokenValid(array $filteredData): bool
+    {
+        if (array_key_exists('activation_token', $filteredData) && array_key_exists('created', $filteredData)) {
+            return true;
+        }
+
+        if (Carbon::parse($filteredData['created']) >= Carbon::now()) {
+            return true;
+        }
+
+        return false;
     }
 }

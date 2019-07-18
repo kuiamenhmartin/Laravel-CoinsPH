@@ -9,13 +9,12 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use App\User;
 
-use App\Services\User\SendConfirmationEmailInterface;
+use App\Services\User\Auth\ResetPassword\SendResetPasswordSuccessEmailInterface;
 
-class ProcessSignUpEmailNotificationJob implements ShouldQueue
+class ResetPasswordSucessEmailNotificationJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected $sendConfirmationEmail;
     protected $user;
     /**
      * Create a new job instance.
@@ -32,8 +31,8 @@ class ProcessSignUpEmailNotificationJob implements ShouldQueue
      *
      * @return void
      */
-    public function handle(SendConfirmationEmailInterface $sendConfirmationEmail)
+    public function handle(SendResetPasswordSuccessEmailInterface $sendRequestEmail)
     {
-        $sendConfirmationEmail->sendEmail($this->user);
+        $sendRequestEmail->sendEmail($this->user);
     }
 }

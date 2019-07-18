@@ -12,7 +12,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
 use App\User;
 
-class UserLogoutEvent
+class UserResetPasswordSuccessEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 

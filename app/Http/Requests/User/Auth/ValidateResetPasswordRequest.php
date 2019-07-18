@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests\User\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Helpers\Traits\CustomizedValidationResponseTrait;
 
-class LoginUserRequest extends FormRequest
+class ValidateResetPasswordRequest extends FormRequest
 {
     use CustomizedValidationResponseTrait;
 
@@ -28,7 +28,8 @@ class LoginUserRequest extends FormRequest
     {
         return [
             'email' => 'required|string|email|max:255',
-            'password' => 'required|string',
+            'password' => 'required|string|min:6|confirmed',
+            'token' => 'required|string',
         ];
     }
 }

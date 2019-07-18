@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Requests\User;
+namespace App\Http\Requests\User\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 use App\Helpers\Traits\CustomizedValidationResponseTrait;
 
-class CreateUserRequest extends FormRequest
+class ValidateEmailRequest extends FormRequest
 {
     use CustomizedValidationResponseTrait;
     /**
@@ -26,9 +26,7 @@ class CreateUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:6|confirmed',
+            'email' => 'required|string|email|max:255'
         ];
     }
 }

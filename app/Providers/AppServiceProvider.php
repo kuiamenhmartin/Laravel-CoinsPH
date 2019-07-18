@@ -6,8 +6,12 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Schema;
 use Laravel\Passport\Passport;
 
-use App\Services\User\SendConfirmationEmailService;
-use App\Services\User\SendConfirmationEmailInterface;
+use App\Services\User\Auth\Registration\SendConfirmationEmailService;
+use App\Services\User\Auth\ResetPassword\SendResetPasswordRequestEmail;
+use App\Services\User\Auth\ResetPassword\SendResetPasswordSuccessEmail;
+use App\Services\User\Auth\Registration\SendConfirmationEmailServiceInterface;
+use App\Services\User\Auth\ResetPassword\SendResetPasswordRequestEmailInterface;
+use App\Services\User\Auth\ResetPassword\SendResetPasswordSuccessEmailInterface;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -19,7 +23,9 @@ class AppServiceProvider extends ServiceProvider
     public function register()
     {
         //https://code.tutsplus.com/tutorials/how-to-register-use-laravel-service-providers--cms-28966
-        $this->app->bind(SendConfirmationEmailInterface::class, SendConfirmationEmailService::class);
+        $this->app->bind(SendConfirmationEmailServiceInterface::class, SendConfirmationEmailService::class);
+        $this->app->bind(SendResetPasswordRequestEmailInterface::class, SendResetPasswordRequestEmail::class);
+        $this->app->bind(SendResetPasswordSuccessEmailInterface::class, SendResetPasswordSuccessEmail::class);
     }
 
     /**

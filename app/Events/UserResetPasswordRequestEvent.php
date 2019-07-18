@@ -10,22 +10,22 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
-use App\User;
+use App\Models\PasswordReset;
 
-class UserLoginEvent
+class UserResetPasswordRequestEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $user;
+    public $passwordReset;
 
     /**
      * Create a new event instance.
      *
      * @return void
      */
-    public function __construct(User $user)
+    public function __construct(PasswordReset $passwordReset)
     {
-        $this->user = $user;
+        $this->passwordReset = $passwordReset;
     }
 
     /**

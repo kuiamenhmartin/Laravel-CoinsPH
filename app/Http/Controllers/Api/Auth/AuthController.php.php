@@ -7,14 +7,14 @@ use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
 
 #Import Custom Requests
-use App\Http\Requests\User\CreateUserRequest;
-use App\Http\Requests\User\LoginUserRequest;
+use App\Http\Requests\User\Auth\CreateUserRequest;
+use App\Http\Requests\User\Auth\LoginUserRequest;
 
 #Import Custom Services
-use App\Services\User\CreateUserService;
-use App\Services\User\LoginUserService;
-use App\Services\User\ConfirmEmailService;
-use App\Services\User\ResendConfirmationEmailService;
+use App\Services\User\Auth\Login\LoginUserService;
+use App\Services\User\Auth\Registration\CreateUserService;
+use App\Services\User\Auth\Registration\ConfirmEmailService;
+use App\Services\User\Auth\Registration\ResendConfirmationEmailService;
 
 #Import App Helper
 use App\Helpers\QioskApp;
@@ -67,7 +67,7 @@ class AuthController extends Controller
      *
      * @return Response
      */
-    public function signupActivate($token, ConfirmEmailService $action): Response
+    public function emailActivation($token, ConfirmEmailService $action): Response
     {
         $user = $action->execute([$token]);
 

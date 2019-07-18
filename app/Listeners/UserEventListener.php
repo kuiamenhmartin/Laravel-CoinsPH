@@ -3,10 +3,15 @@
 namespace App\Listeners;
 
 use App\Events\UserSignedUpEvent;
+use App\Events\UserResetPasswordRequestEvent;
+use App\Events\UserResetPasswordSuccessEvent;
+
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-use App\Jobs\ProcessSignUpEmailNotificationJob;
+use App\Jobs\SignUpEmailNotificationJob;
+use App\Jobs\ResetPasswordRequestEmailNotificationJob;
+use App\Jobs\ResetPasswordSucessEmailNotificationJob;
 
 use Log;
 
@@ -17,31 +22,34 @@ class UserEventListener
      */
     public function onUserSignUp(UserSignedUpEvent $event)
     {
-       //send confirmation email once user signed up
-       //
-       dispatch(new ProcessSignUpEmailNotificationJob($event->user));
+       dispatch(new SignUpEmailNotificationJob($event->user));
 
        //Save log file after user is created
        Log::info("A new user has been registered : {$event->user['email']}");
     }
 
     /**
-     * Handle user login events.
+     *  Send Email when user resets his password
      */
-    public function onUserLogin($event)
+    public function onUserResetPasswordRequest(UserResetPasswordRequestEvent $event)
     {
-        //Save log file after user logged in
-        Log::info("User is now logged in!");
+       dispatch(new ResetPasswordRequestEmailNotificationJob($event->passwordReset));
+
+       //Save log file after user is created
+       Log::info("A user has requested to reset his password : {$event->passwordReset['email']}");
     }
 
     /**
-     * Handle user logout events.
+     *  Send Email when user reset password is successfull
      */
-    public function onUserLogout($event)
+    public function onUserResetPasswordSuccess(UserResetPasswordSuccessEvent $event)
     {
-        //Save log file after user is logged out
-        Log::info("User is now logged out!");
+       dispatch(new ResetPasswordSucessEmailNotificationJob($event->user));
+
+       //Save log file after user is created
+       Log::info("A user has successfully reset his password : {$event->user['email']}");
     }
+
 
     /**
      * Register the listeners for the subscriber.
@@ -56,13 +64,13 @@ class UserEventListener
         );
 
         $events->listen(
-            'App\Events\UserLoginEvent',
-            'App\Listeners\UserEventListener@onUserLogin'
+            'App\Events\UserResetPasswordRequestEvent',
+            'App\Listeners\UserEventListener@onUserResetPasswordRequest'
         );
 
         $events->listen(
-            'App\Events\UserLogoutEvent',
-            'App\Listeners\UserEventListener@onUserLogout'
+            'App\Events\UserResetPasswordSuccessEvent',
+            'App\Listeners\UserEventListener@onUserResetPasswordSuccess'
         );
     }
 }

@@ -21,8 +21,13 @@ Route::group([
 ], function () {
     Route::post('login', 'Api\Auth\AuthController@login')->name('login.api');
     Route::post('register', 'Api\Auth\AuthController@register')->name('register.api');
-    Route::get('signup/activate/{token}', 'Api\Auth\AuthController@signupActivate');
+    Route::get('signup/activate/{token}', 'Api\Auth\AuthController@emailActivation');
     Route::get('signup/resend/{user_id}/confirmation_email', 'Api\Auth\AuthController@resendConfirmationEmail');
+
+
+    Route::post('password/create', 'Api\Auth\PasswordResetController@create');
+    Route::get('password/find/{token}', 'Api\Auth\PasswordResetController@find');
+    Route::post('password/reset', 'Api\Auth\PasswordResetController@reset');
 
     Route::group([
       'middleware' => ['auth:api','verified']
