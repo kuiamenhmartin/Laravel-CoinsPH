@@ -8,10 +8,11 @@ use Illuminate\Support\Facades\Hash;
 use App\Services\ActionInterface;
 use App\Events\UserSignedUpEvent;
 use App\Helpers\Traits\UserServiceTrait;
+use Carbon\Carbon;
 
-class CreateUserService implements ActionInterface
+class ResendConfirmationEmailService implements ActionInterface
 {
-   use UserServiceTrait;
+    use UserServiceTrait;
 
     protected $signedUpEvent;
 
@@ -26,19 +27,17 @@ class CreateUserService implements ActionInterface
 
     public function execute(array $data) : User
     {
-        //Hash user password before saving
-        $data['password']= Hash::make($data['password']);
+        $user = $this->User::where(['id' => $data[0]])->first();
+
+        if (!$user) {
+            throw new CustomException('Something went wrong.', 404);
+        }
 
         //We will create activation code to be used for Email Confirmation
-        $data['activation_token'] = $this->createEmailActivationToken();
+        $user->activation_token = $this->createEmailActivationToken();
 
-        //Now we create the user by adding it to our database
-        $user = $this->User::create($data);
-
-        //throws an exception if user hasnt yet created
-        if (!$user) {
-            throw new CustomException('Registration falied!', 500);
-        }
+        //then save the new token
+        $user->save();
 
         //dispatch an event to send confirmation email and log user creation
         event(new $this->signedUpEvent($user));

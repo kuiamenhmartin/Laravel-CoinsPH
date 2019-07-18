@@ -53,7 +53,7 @@ class GenerateApiParameterService
          *
          * @var string
          */
-        $serializedYourStateParams = base64_encode(serialize($yourStateParams));
+        $serializedYourStateParams = \QioskApp::serializeParams($yourStateParams);
 
         //merge state param and the config data to become one array
         return Arr::add(

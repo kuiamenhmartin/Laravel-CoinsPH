@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('activation_token')->comment('Only for users who register via api')->nullable();
+            $table->text('activation_token')->comment('Only for users who register via api')->nullable();
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

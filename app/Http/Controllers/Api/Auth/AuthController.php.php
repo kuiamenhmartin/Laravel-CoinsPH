@@ -14,6 +14,7 @@ use App\Http\Requests\User\LoginUserRequest;
 use App\Services\User\CreateUserService;
 use App\Services\User\LoginUserService;
 use App\Services\User\ConfirmEmailService;
+use App\Services\User\ResendConfirmationEmailService;
 
 #Import App Helper
 use App\Helpers\QioskApp;
@@ -32,7 +33,7 @@ class AuthController extends Controller
         $user = $action->execute($request->validated());
 
         //throw success when action executes succesfully
-        return QioskApp::httpResponse(QioskApp::SUCCESS, 'You have successfully signed up. Please verify your email to use this app.');
+        return QioskApp::httpResponse(QioskApp::SUCCESS, 'You have successfully signed up. Please verify your email to start using this app.', ['user_id' => $user->id]);
     }
 
     /**
@@ -72,6 +73,19 @@ class AuthController extends Controller
 
         //throw success when action executes succesfully
         return QioskApp::httpResponse(QioskApp::SUCCESS, 'Your email is now verified!');
+    }
+
+    /**
+     * REsend Confirm email
+     *
+     * @return Response
+     */
+    public function resendConfirmationEmail($userId, ResendConfirmationEmailService $action): Response
+    {
+        $user = $action->execute([$userId]);
+
+        //throw success when action executes succesfully
+        return QioskApp::httpResponse(QioskApp::SUCCESS, 'Email confirmation has been resent.');
     }
 }
 

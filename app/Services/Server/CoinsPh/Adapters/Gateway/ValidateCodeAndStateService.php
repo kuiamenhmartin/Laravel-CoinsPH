@@ -29,7 +29,7 @@ class ValidateCodeAndStateService
         $this->validateParams($data);
 
         //Validated state
-        $decodeState = $this->decodeState($data['state']);
+        $decodeState = \QioskApp::unserializeParams($data['state']);
 
         //Return Code and State
         return Arr::add($decodeState, 'code', $data['code']);
@@ -74,7 +74,8 @@ class ValidateCodeAndStateService
      */
     private function checkIfStateIsValid(string $state, string $app_name): bool
     {
-        $filteredState = array_filter($this->decodeState($state));
+        // Decode and Unserialize state to extract subid, created and appname it contians
+        $filteredState = array_filter(\QioskApp::unserializeParams($state));
 
         if (!array_key_exists('subid', $filteredState) || !array_key_exists('created', $filteredState)
         || !array_key_exists('app_name', $filteredState)) {
@@ -90,16 +91,5 @@ class ValidateCodeAndStateService
         }
 
         return false;
-    }
-
-    /**
-     * Decode and Unserialize state to extract subid, created and appname it contians
-     *
-     * @param string $state will be converted to array to get the subid, created and appname
-     * @return array
-     */
-    private function decodeState(string $state): array
-    {
-         return unserialize(base64_decode($state));
     }
 }
