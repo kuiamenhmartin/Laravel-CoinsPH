@@ -6,13 +6,11 @@ use App\User;
 use Illuminate\Support\Facades\Hash;
 use App\Services\ActionInterface;
 use App\Exceptions\CustomException;
-use App\Helpers\Traits\UserServiceTrait;
 use Carbon\Carbon;
+use App\Helpers\QioskApp;
 
 class ConfirmEmailService implements ActionInterface
 {
-    use UserServiceTrait;
-
     protected $User;
 
     public function __construct(User $User)
@@ -23,7 +21,7 @@ class ConfirmEmailService implements ActionInterface
     public function execute(array $token) : User
     {
         // Decode and Unserialize token to extract created and activation_token it contians
-        $filteredData = array_filter(\QioskApp::unserializeParams($token[0]));
+        $filteredData = array_filter(QioskApp::unserializeParams($token[0]));
 
         if (!$this->isEmailTokenValid($filteredData['email'])) {
             throw new CustomException('This activation token is invalid.', 404);
@@ -50,7 +48,7 @@ class ConfirmEmailService implements ActionInterface
      */
     private function isEmailTokenValid(array $filteredData): bool
     {
-        if (array_key_exists('activation_token', $filteredData) && array_key_exists('created', $filteredData)) {
+        if (array_key_exists('token', $filteredData) && array_key_exists('created', $filteredData)) {
             return true;
         }
 

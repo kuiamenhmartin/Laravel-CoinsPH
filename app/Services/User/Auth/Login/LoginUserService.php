@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Services\User;
+namespace App\Services\User\Auth\Login;
 
 use App\User;
 use Illuminate\Support\Facades\Hash;
 use App\Services\ActionInterface;
 use App\Exceptions\CustomException;
 use Carbon;
+use App\Helpers\QioskApp;
 
 class LoginUserService implements ActionInterface
 {
@@ -17,7 +18,7 @@ class LoginUserService implements ActionInterface
         $this->User = $User;
     }
 
-    public function execute(array $data) : User
+    public function execute(array $data): User
     {
         $user = $this->User::where('email', $data['email'])->first();
 

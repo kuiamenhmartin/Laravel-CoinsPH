@@ -11,7 +11,7 @@ use App\User;
 
 use App\Services\User\Auth\Registration\SendConfirmationEmailServiceInterface;
 
-class ProcessSignUpEmailNotificationJob implements ShouldQueue
+class SignUpEmailNotificationJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 

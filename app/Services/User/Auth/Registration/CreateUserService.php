@@ -7,12 +7,10 @@ use App\Exceptions\CustomException;
 use Illuminate\Support\Facades\Hash;
 use App\Services\ActionInterface;
 use App\Events\UserSignedUpEvent;
-use App\Helpers\Traits\UserServiceTrait;
+use App\Helpers\QioskApp;
 
 class CreateUserService implements ActionInterface
 {
-   use UserServiceTrait;
-
     protected $signedUpEvent;
 
     protected $User;
@@ -30,7 +28,7 @@ class CreateUserService implements ActionInterface
         $data['password'] = Hash::make($data['password']);
 
         //We will create activation code to be used for Email Confirmation
-        $data['activation_token'] = $this->createEmailActivationToken();
+        $data['activation_token'] = QioskApp::createToken('email');
 
         //Now we create the user by adding it to our database
         $user = $this->User::create($data);

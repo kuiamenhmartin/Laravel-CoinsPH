@@ -9,6 +9,8 @@ use App\Exceptions\UserException;
 
 use Illuminate\Support\Arr;
 
+use Carbon\Carbon;
+
 /**
 * GLOBAL CONSTANTS of the APP
 */
@@ -50,6 +52,20 @@ class QioskApp
         ];
 
         return response(array_filter($responseData), $code);
+    }
+
+    /**
+     * Create and Return email activation token
+     * for new user who register to this app
+     * @return string email activation code
+     */
+    public static function createToken(string $key): string
+    {
+        $token = array($key => array(
+            'created' => Carbon::now(),
+            'token' => str_random(20)
+        ));
+        return static::serializeParams($token);
     }
 
     /**

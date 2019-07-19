@@ -16,7 +16,7 @@ class ValidateResetPasswordRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth()->check()?false:true;
+        return auth()->check() ? false : true;
     }
 
     /**
@@ -27,7 +27,6 @@ class ValidateResetPasswordRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|string|email|max:255',
             'password' => 'required|string|min:6|confirmed',
             'token' => 'required|string',
         ];

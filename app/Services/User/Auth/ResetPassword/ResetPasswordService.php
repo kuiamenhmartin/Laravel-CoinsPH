@@ -32,8 +32,7 @@ class ResetPasswordService implements ActionInterface
     public function execute(array $data) : PasswordReset
     {
         $passwordReset = $this->PasswordReset::where([
-            ['token', $data['token']],
-            ['email', $data['email']]
+            ['token', $data['token']]
         ])->first();
 
         if (!$passwordReset) {

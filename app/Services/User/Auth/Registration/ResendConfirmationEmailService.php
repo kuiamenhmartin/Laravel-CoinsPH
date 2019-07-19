@@ -7,13 +7,11 @@ use App\Exceptions\CustomException;
 use Illuminate\Support\Facades\Hash;
 use App\Services\ActionInterface;
 use App\Events\UserSignedUpEvent;
-use App\Helpers\Traits\UserServiceTrait;
 use Carbon\Carbon;
+use App\Helpers\QioskApp;
 
 class ResendConfirmationEmailService implements ActionInterface
 {
-    use UserServiceTrait;
-
     protected $signedUpEvent;
 
     protected $User;
@@ -33,8 +31,12 @@ class ResendConfirmationEmailService implements ActionInterface
             throw new CustomException('Something went wrong.', 404);
         }
 
+        if (!is_null($user->email_verified_at)) {
+            throw new CustomException('Your email was already verified.', 403);
+        }
+
         //We will create activation code to be used for Email Confirmation
-        $user->activation_token = $this->createEmailActivationToken();
+        $user->activation_token = QioskApp::createToken('email');
 
         //then save the new token
         $user->save();
