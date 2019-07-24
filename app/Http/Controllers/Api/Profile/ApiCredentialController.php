@@ -13,6 +13,7 @@ use App\Http\Requests\Profile\CredentialRequest;
 use App\Services\Profile\ApiCredential\StoreService;
 use App\Services\Profile\ApiCredential\UpdateService;
 use App\Services\Profile\ApiCredential\DeleteService;
+use App\Services\Server\CoinsPh\Adapters\Gateway\ApiCredentialService;
 
 #Import Laravel Helper
 use Illuminate\Support\Arr;
@@ -22,6 +23,21 @@ use App\Helpers\QioskApp;
 
 class ApiCredentialController extends Controller
 {
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @return Response
+     */
+    public function index($app_name, ApiCredentialService $action): Response
+    {
+      dd($app_name);
+        $result = $action->execute(request()->user()->id, $app_name);
+
+        //throw success when action executes succesfully
+        return QioskApp::httpResponse(QioskApp::SUCCESS, 'Your config is ready!', $result);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
