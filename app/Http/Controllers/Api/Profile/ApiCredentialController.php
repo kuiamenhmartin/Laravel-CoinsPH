@@ -13,7 +13,7 @@ use App\Http\Requests\Profile\CredentialRequest;
 use App\Services\Profile\ApiCredential\StoreService;
 use App\Services\Profile\ApiCredential\UpdateService;
 use App\Services\Profile\ApiCredential\DeleteService;
-use App\Services\Server\CoinsPh\Adapters\Gateway\ApiCredentialService;
+use App\Services\Server\CoinsPh\Adapters\Gateway\GenerateCredentialService;
 
 #Import Laravel Helper
 use Illuminate\Support\Arr;
@@ -29,9 +29,8 @@ class ApiCredentialController extends Controller
      *
      * @return Response
      */
-    public function index($app_name, ApiCredentialService $action): Response
+    public function index($app_name, GenerateCredentialService $action): Response
     {
-      dd($app_name);
         $result = $action->execute(request()->user()->id, $app_name);
 
         //throw success when action executes succesfully

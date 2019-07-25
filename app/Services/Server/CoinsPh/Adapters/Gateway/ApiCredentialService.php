@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\Server\CoinsPh;
+namespace App\Services\Server\CoinsPh\Adapters\Gateway;
 
 use App\Exceptions\CustomException;
 use App\Models\UserExternalApiCredentials;

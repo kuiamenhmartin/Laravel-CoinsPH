@@ -42,7 +42,7 @@ Route::group([
     'prefix' => 'profile'
 ], function () {
     Route::post('credential', 'Api\Profile\ApiCredentialController@store')->name('api.credential.store');
-    Route::get('credential/{app_name}', 'Api\Profile\ApiCredentialController@index')->name('api.credential.view');
+    Route::get('credential/{app_name}', 'Api\Profile\ApiCredentialController@index')->name('api.credential.index');
     Route::patch('credential/{api_credential_id}', 'Api\Profile\ApiCredentialController@update')->name('api.credential.update');
     Route::delete('credential/{api_credential_id}', 'Api\Profile\ApiCredentialController@destroy')->name('api.credential.delete');
 });

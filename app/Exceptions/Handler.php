@@ -105,7 +105,7 @@ class Handler extends ExceptionHandler
 
         return \QioskApp::httpResponse(
             \QioskApp::UNAUTHENTICATED,
-            $exception->getMessage(),
+            $exception->getMessage()."dsadsada",
             [],
             401
         );
