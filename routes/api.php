@@ -42,7 +42,7 @@ Route::group([
     'prefix' => 'profile'
 ], function () {
     Route::post('credential', 'Api\Profile\ApiCredentialController@store')->name('api.credential.store');
-    Route::get('credential/{app_name}', 'Api\Profile\ApiCredentialController@index')->name('api.credential.index');
+    Route::get('credential', 'Api\Profile\ApiCredentialController@index')->name('api.credential.index');
     Route::patch('credential/{api_credential_id}', 'Api\Profile\ApiCredentialController@update')->name('api.credential.update');
     Route::delete('credential/{api_credential_id}', 'Api\Profile\ApiCredentialController@destroy')->name('api.credential.delete');
 });
@@ -50,9 +50,10 @@ Route::group([
 #Connect to CoinsPH
 Route::group([
     'middleware' => ['auth:api','verified', 'api.credential'],
-    'prefix' => 'connect'
+    'prefix' => 'generate'
 ], function () {
-    Route::get('{app_name}', 'Api\Server\CoinsPh\GatewayController@getConfig')->name('api.connect');
+    Route::get('config-as-params', 'Api\Server\CoinsPh\GatewayController@getConfig')->name('api.connect');
+    Route::get('access-token', 'Api\Server\CoinsPh\GatewayController@generateAccessToken')->name('api.connect.accesstoken');
 });
 
 Route::get('{app_name}/callback', 'Api\Server\CoinsPh\GatewayController@callback')->name('api.callback');

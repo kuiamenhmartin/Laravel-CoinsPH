@@ -30,14 +30,12 @@ class GatewayController extends Controller
     */
     public function getConfig(GenerateApiParameterService $action): Response
     {
-        $appName = request()->route('app_name');
-
-        $parameters = ['app_name' => $appName, 'token' => request()->bearerToken(), 'user_id' => request()->user()->id];
+        $parameters = ['token' => request()->bearerToken(), 'user_id' => request()->user()->id];
 
         $result = $action->execute($parameters);
 
         //throw success when action executes succesfully
-        return QioskApp::httpResponse(QioskApp::SUCCESS, sprintf('Your API Credential for %s', $appName), $result);
+        return QioskApp::httpResponse(QioskApp::SUCCESS, sprintf('Your API Credential for %s', 'your app'), $result);
     }
 
     /**
@@ -60,9 +58,27 @@ class GatewayController extends Controller
         $yourApiToken = $accessTokenAction->execute($validated);
 
         //throw success when action executes succesfully
-        return QioskApp::httpResponse(QioskApp::SUCCESS, sprintf('Your are now connected to %s', $appName), [
+        return QioskApp::httpResponse(QioskApp::SUCCESS, sprintf('Your are now granted access to connect to %s', $appName), [
             'atoken' => $yourApiToken,
             'ptoken' => $validated['token']
+        ]);
+    }
+
+    /**
+     * Regenerate access token using refresh token
+     *
+     * @param $validationAction ValidateCodeAndStateService
+     * @param $accessTokenAction AccessTokenService
+     *
+     * @return Response
+     */
+    public function generateAccessToken(RefreshTokenService $refreshTokenAction): Response
+    {
+        $yourApiToken = $refreshTokenAction->execute([request()->user()->id]);
+
+        //throw success when action executes succesfully
+        return QioskApp::httpResponse(QioskApp::SUCCESS, sprintf('Your are now granted access to connect to %s', 'your api'), [
+            'atoken' => $yourApiToken
         ]);
     }
 }

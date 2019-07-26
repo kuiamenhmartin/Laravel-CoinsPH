@@ -29,9 +29,9 @@ class ApiCredentialController extends Controller
      *
      * @return Response
      */
-    public function index($app_name, GenerateCredentialService $action): Response
+    public function index(GenerateCredentialService $action): Response
     {
-        $result = $action->execute(request()->user()->id, $app_name);
+        $result = $action->execute([request()->user()->id]);
 
         //throw success when action executes succesfully
         return QioskApp::httpResponse(QioskApp::SUCCESS, 'Your config is ready!', $result);

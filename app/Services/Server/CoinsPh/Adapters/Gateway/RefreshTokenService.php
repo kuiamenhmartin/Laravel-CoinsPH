@@ -5,7 +5,7 @@ namespace App\Services\Server\CoinsPh\Adapters\Gateway;
 use App\User;
 use App\Models\UserExternalApiCredentialTokens;
 use App\Services\Server\CoinsPh\ApiCredentialAbstract;
-use App\Services\Server\CoinsPh\ApiCredentialService;
+use App\Services\Server\CoinsPh\Adapters\Gateway\ApiCredentialService;
 
 use Illuminate\Support\Arr;
 use GuzzleHttp\Client;
@@ -36,7 +36,7 @@ class RefreshTokenService extends ApiCredentialAbstract
      */
     public function execute(array $data): string
     {
-        $yourApiConfig = $this->ApiCredential->execute($data['subid'], $data['app_name']);
+        $yourApiConfig = $this->ApiCredential->execute([$data[0]]);
 
         $refreshToken = $this->getRefreshToken($yourApiConfig->id);
 

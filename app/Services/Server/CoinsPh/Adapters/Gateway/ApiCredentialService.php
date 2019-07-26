@@ -17,18 +17,18 @@ class ApiCredentialService
 
     /**
      * Get the Api Credential from DB
-     * @param  int  $userId  [description]
+     * @param  array  $data  [description]
      * @param  string $appName [description]
      * @return UserExternalApiCredentials
      */
-    public function execute(int $userId, string $appName): UserExternalApiCredentials
+    public function execute(array $data): UserExternalApiCredentials
     {
-        $yourApiConfig = $this->UserModel::find($userId)->getApiCredential($appName)->first();
+        $yourApiConfig = $this->UserModel::find($data[0])->getApiCredential()->first();
 
         throw_if(
             is_null($yourApiConfig),
             CustomException::class,
-            sprintf('You haven\'t configured %s yet!', $appName),
+            sprintf('You haven\'t configured %s yet!', 'your app'),
             403
         );
 

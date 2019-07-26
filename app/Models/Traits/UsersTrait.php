@@ -16,8 +16,8 @@ trait UsersTrait
      * @param  string $appName the name of your application/api
      * @return collection
      */
-    public function getApiCredential(string $appName = '')
+    public function getApiCredential()
     {
-        return $this->apis()->where(['app_name' => $appName, 'is_active' => 1]);
+        return $this->apis()->where(['is_active' => 1]);
     }
 }

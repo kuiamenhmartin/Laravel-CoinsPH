@@ -22,28 +22,32 @@ class GenerateCredentialService
 
     /**
      * Get the Api Credential from DB
-     * @param  int  $userId  [description]
+     * @param  array  data  [description]
      * @param  string $appName [description]
      * @return Array
      */
-    public function execute(int $userId, string $appName): array
+    public function execute(array $data): array
     {
-        $yourApiConfig = $this->UserModel::find($userId)->getApiCredential($appName)->first();
+        $yourApiConfig = $this->UserModel::find($data[0])->getApiCredential()->first();
 
         throw_if(
             is_null($yourApiConfig),
             CustomException::class,
-            sprintf('You haven\'t configured %s yet!', $appName),
+            sprintf('You haven\'t configured %s yet!', 'your app'),
             403
         );
 
         return [
-          'appName' => $yourApiConfig->app_name,
-          'clientId' => $yourApiConfig->client_id,
-          'clientSecret' => $yourApiConfig->client_secret,
-          'redirectUri' => $yourApiConfig->redirect_uri,
-          'scopes' => $yourApiConfig->scopes,
-          'isRefreshTokenExist' => $this->isRefreshTokenExist($yourApiConfig->id)
+          'appId' => $yourApiConfig->id,
+          'columns' => [
+            'app_name' => $yourApiConfig->app_name,
+            'client_id' => $yourApiConfig->client_id,
+            'client_secret' => $yourApiConfig->client_secret,
+            'redirect_uri' => $yourApiConfig->redirect_uri,
+            'authentication_uri'=> $yourApiConfig->authentication_uri,
+            'scopes' => $yourApiConfig->scopes,
+            'isRefreshTokenExist' => $this->isRefreshTokenExist($yourApiConfig->id)
+          ]
         ];
     }
 

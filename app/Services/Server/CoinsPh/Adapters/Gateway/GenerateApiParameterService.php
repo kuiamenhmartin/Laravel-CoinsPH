@@ -3,7 +3,7 @@
 namespace App\Services\Server\CoinsPh\Adapters\Gateway;
 
 use App\Exceptions\CustomException;
-use App\Services\Server\CoinsPh\ApiCredentialService;
+use App\Services\Server\CoinsPh\Adapters\Gateway\ApiCredentialService;;
 
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
@@ -30,12 +30,12 @@ class GenerateApiParameterService
          * We need to get the Api Credentials from DB
          * that we previously added
          */
-        $yourApiConfig = $this->ApiCredential->execute($data['user_id'], $data['app_name']);
+        $yourApiConfig = $this->ApiCredential->execute([$data['user_id']]);
 
         throw_if(
             is_null($yourApiConfig),
             CustomException::class,
-            sprintf('You haven\'t configured %s yet!', $data['app_name']),
+            sprintf('You haven\'t configured %s yet!', 'your app'),
             403
         );
 
@@ -43,7 +43,7 @@ class GenerateApiParameterService
           'token' => $data['token'],
           'subid' => $yourApiConfig->user_id,
           'created' => date('Y-m-d H:i:s'),
-          'app_name' => $data['app_name'],
+          'app_name' => $yourApiConfig->app_name,
         ];
 
         /**

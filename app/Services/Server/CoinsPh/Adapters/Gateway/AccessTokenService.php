@@ -4,7 +4,7 @@ namespace App\Services\Server\CoinsPh\Adapters\Gateway;
 
 use App\Services\Server\CoinsPh\ApiCredentialAbstract;
 use App\Models\UserExternalApiCredentialTokens;
-use App\Services\Server\CoinsPh\ApiCredentialService;
+use App\Services\Server\CoinsPh\Adapters\Gateway\ApiCredentialService;
 use App\User;
 
 use Illuminate\Support\Arr;
@@ -36,7 +36,7 @@ class AccessTokenService extends ApiCredentialAbstract
      */
     public function execute(array $data): string
     {
-        $yourApiConfig =  $this->ApiCredential->execute($data['subid'], $data['app_name']);
+        $yourApiConfig =  $this->ApiCredential->execute([$data['subid']]);
 
         //Get access_token via authorization_code
         $tokens = $this->requestForAccessToken($yourApiConfig->authentication_uri, [
