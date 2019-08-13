@@ -1,0 +1,73 @@
+version: '3.3'
+
+networks:
+  laravel:
+
+volumes:
+  dbdata:
+  nodemodules:
+
+services:
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./src:/var/www
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+      - mysql
+    networks:
+      - laravel
+
+  mysql:
+    image: mysql:5.7.22
+    container_name: mysql
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: bitwallet
+      MYSQL_USER: root
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    volumes:
+      - dbdata:/var/lib/mysql
+    networks:
+      - laravel
+
+  php:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: php
+    volumes:
+      - ./src:/var/www
+    ports:
+      - "9000:9000"
+    networks:
+      - laravel
+
+  frontend:
+    build:
+      context: /opt/lampp/htdocs/practice
+      dockerfile: Dockerfile
+    container_name: frontend
+    working_dir: /app
+    user: 1000:1000
+    environment:
+      - NODE_ENV=development
+      - NODE_PATH=/app/node_modules
+    volumes:
+      - /opt/lampp/htdocs/practice:/app
+      - nodemodules:/app/node_modules
+    command: npm run serve
+    ports:
+      - "8081:8081"
+    networks:
+      - laravel
